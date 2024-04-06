@@ -20,9 +20,9 @@ postController.get("/timeline/posts",verifyToken, async(req,res)=>{
     try {
         const currentUser = await User.findById(req.user.id)
         const posts = await Post.find({}).populate("user","-password")
-        const currentUserPosts = await Post.find({user:currentUser._id}).populate("user","-password")
+        const currentUserPosts = await Post.find({user:currentUser?._id}).populate("user","-password")
        const friendsPosts = posts.filter((post)=>{
-        return currentUser.followings.includes(post.user._id)
+        return currentUser.followings.includes(post?.user?._id)
        } )
 
       let timelinePosts = currentUserPosts.concat(...friendsPosts)
