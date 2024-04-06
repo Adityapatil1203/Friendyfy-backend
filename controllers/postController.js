@@ -18,6 +18,7 @@ postController.get("/find/userposts/:id",async(req,res)=>{
 //get timeline post 
 postController.get("/timeline/posts",verifyToken, async(req,res)=>{
     try {
+        console.log("req ",req.user.id)
         const currentUser = await User.findById(req.user.id)
         const posts = await Post.find({}).populate("user","-password")
         const currentUserPosts = await Post.find({user:currentUser?._id}).populate("user","-password")
@@ -26,15 +27,16 @@ postController.get("/timeline/posts",verifyToken, async(req,res)=>{
        } )
 
       let timelinePosts = currentUserPosts.concat(...friendsPosts)
+      console.log("timelinenee ",timelinePosts)
    
-      timelinePosts.sort((a,b)=> b.createdAt-a.createdAt)
-
+    
       if(timelinePosts.length > 40){
         timelinePosts = timelinePosts.slice(0,40)
       }
-
+      console.log("timelinenee ",timelinePosts)
       return res.status(200).json(timelinePosts)
     } catch (error) {
+        console.log("timeline error ",error);
         return res.status(500).json(error.message)
     }
 })
