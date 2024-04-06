@@ -28,7 +28,8 @@ postController.get("/timeline/posts",verifyToken, async(req,res)=>{
 
       let timelinePosts = currentUserPosts.concat(...friendsPosts)
       console.log("timelinenee ",timelinePosts)
-   
+
+         timelinePosts.sort((a, b) => b.createdAt - a.createdAt);
     
       if(timelinePosts.length > 40){
         timelinePosts = timelinePosts.slice(0,40)
